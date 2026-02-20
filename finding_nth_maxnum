@@ -1,0 +1,26 @@
+// Online C compiler to run C program online
+#include <stdio.h>
+
+int main() {
+    int arr[]={1,8,6,9,5,4};
+    int n=6;
+    int k=5;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=i+1;j<n;j++){
+        if(arr[i]>arr[j])
+        {
+            int temp=arr[i];
+            arr[i]=arr[j];
+            arr[j]=temp;
+        }
+       }
+    }
+    for(int i=0;i<n;i++)
+    {
+        printf("%d ",arr[i]);
+    }
+    printf("/nthe nth maxinumber is=%d",arr[n-k]);
+    return 0;
+}
+        
