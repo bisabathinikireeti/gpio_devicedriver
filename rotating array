@@ -1,0 +1,100 @@
+//right rotating with m times
+/*#include<stdio.h>
+void main(){
+int temp,arr[]={1,2,3,4,5};
+int m=2,n=5;
+printf("original array\n");
+for(int i=0;i<n;i++)
+{
+   printf("%d ",arr[i]);
+}
+printf("\nreversed array\n");
+for(int i=0;i<n/2;i++)
+{
+    temp=arr[i];
+    arr[i]=arr[n-i-1];
+    arr[n-i-1]=temp;
+
+}
+for(int i=0;i<n;i++)
+{
+   printf("%d ",arr[i]);
+}
+for(int i=0;i<m/2;i++)
+{
+    temp=arr[i];
+    arr[i]=arr[m-i-1];
+    arr[m-i-1]=temp;
+}
+
+printf("\narray sorted m elements after sorting array\n");
+for(int i=0;i<n;i++)
+{
+   printf("%d ",arr[i]);
+}
+printf("array sorted m elements after remaining sorting array final output\n");
+for(int i=m;i<(m+n)/2;i++)
+{
+    temp=arr[i];
+    arr[i]=arr[n-(i-m)-1];
+    arr[n-(i-m)-1]=temp;
+}
+for(int i=0;i<n;i++)
+{
+   printf("%d ",arr[i]);
+}
+}*/
+
+
+
+
+
+
+
+//left rotating with m times
+#include<stdio.h>
+void main(){
+    int temp,arr[]={1,2,3,4,5,6};
+int m=3,n=6;
+printf("original array\n");
+for(int i=0;i<n;i++)
+{
+   printf("%d ",arr[i]);
+}
+printf("\nreversed first m elements array\n");
+for(int i=0;i<m/2;i++)
+{
+    temp=arr[i];
+    arr[i]=arr[m-i-1];
+    arr[m-i-1]=temp;
+
+}
+for(int i=0;i<n;i++)
+{
+   printf("%d ",arr[i]);
+}
+for(int i=m;i<(n+m)/2;i++)
+{
+    temp=arr[i];
+    arr[i]=arr[n-(i-m)-1];
+    arr[n-(i-m)-1]=temp;
+}
+
+printf("\n elements after reversed remaing array\n");
+for(int i=0;i<n;i++)
+{
+   printf("%d ",arr[i]);
+}
+printf("array sorted m elements after remaining sorting array final output\n");
+for(int i=0;i<n/2;i++)
+{
+    temp=arr[i];
+    arr[i]=arr[n-i-1];
+    arr[n-i-1]=temp;
+}
+for(int i=0;i<n;i++)
+{
+   printf("%d ",arr[i]);
+}
+}
+
