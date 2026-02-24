@@ -1120,3 +1120,465 @@ This 4 Wheeler Vehicle is a Car
 | Are inherited     | Are NOT inherited        |
 | Can be overridden | Cannot be overridden     |
 | Belong to class   | Used to initialize class |
+
+
+
+give full code and explanation for this 
+
+Perfect 🔥
+Now let’s take that parameterized constructor in inheritance and understand it completely from scratch.
+
+🔴 Problem Situation
+
+Suppose base class has only parameterized constructor.
+
+Like this:
+
+#include <iostream>
+using namespace std;
+
+class Vehicle {
+public:
+    Vehicle(int x) {
+        cout << "Vehicle constructor called with value: " << x << endl;
+    }
+};
+
+Now we create a derived class:
+
+class Car : public Vehicle {
+public:
+    Car() {
+        cout << "Car constructor called" << endl;
+    }
+};
+
+And in main():
+
+int main() {
+    Car obj;
+    return 0;
+}
+❌ What Happens?
+
+This will give COMPILATION ERROR.
+
+Why?
+
+Because:
+
+When Car obj; is created
+
+First, base class constructor must run
+
+But Vehicle does NOT have default constructor
+
+It only has Vehicle(int x)
+
+So compiler doesn't know what value to pass.
+
+🔥 Important Rule
+
+If base class has only parameterized constructor,
+derived class MUST explicitly call it.
+
+✅ Correct Full Code
+#include <iostream>
+using namespace std;
+
+class Vehicle {
+public:
+    Vehicle(int x) {
+        cout << "Vehicle constructor called with value: " << x << endl;
+    }
+};
+
+class Car : public Vehicle {
+public:
+    Car(int y) : Vehicle(y) {   // calling base constructor
+        cout << "Car constructor called with value: " << y << endl;
+    }
+};
+
+int main() {
+    Car obj(10);
+    return 0;
+}
+🔵 Output
+Vehicle constructor called with value: 10
+Car constructor called with value: 10
+🔴 What Is This Line?
+Car(int y) : Vehicle(y)
+
+This is called:
+
+Constructor Initialization List
+
+It tells compiler:
+
+Before running Car constructor,
+call Vehicle constructor with value y.
+
+🔥 Execution Flow Step-by-Step
+
+When you write:
+
+Car obj(10);
+
+Step 1️⃣ Memory allocated for Car
+Step 2️⃣ Vehicle constructor runs first → prints 10
+Step 3️⃣ Car constructor runs → prints 10
+
+Always:
+
+Base constructor → Derived constructor
+
+🔵 What If We Don’t Pass?
+
+If you remove this:
+
+: Vehicle(y)
+
+Compiler error:
+
+No default constructor exists for class Vehicle
+
+Because compiler tries to call Vehicle(),
+but it does not exist.
+
+🔴 Very Important Interview Question
+
+Q: Why must base constructor be called first?
+
+Answer:
+
+Because derived class contains base class as part of its memory.
+Base part must be constructed before derived part.
+
+🔵 Visual Memory Layout
+
+For:
+
+Car obj(10);
+
+Memory looks like:
+
+[ Vehicle part ]
+[ Car part ]
+
+Vehicle must be initialized before Car.
+
+🔥 What If Base Has Both Constructors?
+class Vehicle {
+public:
+    Vehicle() {
+        cout << "Default constructor\n";
+    }
+
+    Vehicle(int x) {
+        cout << "Parameterized constructor\n";
+    }
+};
+
+If you don’t explicitly call,
+default constructor runs automatically.
+
+🎯 Final Important Points
+
+✔ Constructors are not inherited
+✔ Base constructor always runs first
+✔ If base has only parameterized constructor → derived must call it
+✔ Use initialization list
+
+Now tell me:
+
+Do you want next:
+
+1️⃣ Destructor example with parameters
+2️⃣ Multilevel constructor chaining
+3️⃣ Virtual constructor concept (important)
+4️⃣ Copy constructor in inheritance
+
+Which one? 😎
+
+ok if base has parameterised construter and drived has defalut constructer what it does 
+
+Very very good question 👏🔥
+Now you're thinking like a real C++ learner.
+
+You asked:
+
+If base has parameterized constructor and derived has default constructor, what happens?
+
+Let’s answer clearly.
+
+🔴 Case 1: Base Has ONLY Parameterized Constructor
+
+Example:
+
+#include <iostream>
+using namespace std;
+
+class Base {
+public:
+    Base(int x) {
+        cout << "Base constructor: " << x << endl;
+    }
+};
+
+class Derived : public Base {
+public:
+    Derived() {
+        cout << "Derived constructor\n";
+    }
+};
+
+int main() {
+    Derived obj;
+    return 0;
+}
+❌ What Happens?
+
+This gives COMPILATION ERROR.
+
+Why?
+
+Because:
+
+When Derived obj; is created:
+
+1️⃣ Base constructor must run first
+2️⃣ Compiler tries to call Base() (default constructor)
+3️⃣ But Base does NOT have default constructor
+4️⃣ Only Base(int x) exists
+
+So compiler says:
+
+Error: no matching function for call to Base::Base()
+
+🔥 Important Rule
+
+If base class does NOT have default constructor,
+derived class MUST explicitly call base constructor.
+
+✅ Correct Version
+#include <iostream>
+using namespace std;
+
+class Base {
+public:
+    Base(int x) {
+        cout << "Base constructor: " << x << endl;
+    }
+};
+
+class Derived : public Base {
+public:
+    Derived() : Base(100) {   // explicitly calling Base constructor
+        cout << "Derived constructor\n";
+    }
+};
+
+int main() {
+    Derived obj;
+    return 0;
+}
+🔵 Output
+Base constructor: 100
+Derived constructor
+🔴 What Actually Happens Internally?
+
+When you write:
+
+Derived obj;
+
+Compiler does:
+
+Step 1️⃣ Allocate memory
+Step 2️⃣ Call Base constructor
+Step 3️⃣ Call Derived constructor
+
+But compiler needs to know what value to pass to Base.
+
+If you don’t tell it, error.
+
+🔥 Case 2: If Base ALSO Has Default Constructor
+
+Example:
+
+class Base {
+public:
+    Base() {
+        cout << "Base default\n";
+    }
+
+    Base(int x) {
+        cout << "Base parameterized\n";
+    }
+};
+
+class Derived : public Base {
+public:
+    Derived() {
+        cout << "Derived default\n";
+    }
+};
+
+Now:
+
+Derived obj;
+
+Output:
+
+Base default
+Derived default
+
+Why?
+
+Because Base default constructor exists, so compiler calls it automatically.
+
+🎯 Final Clear Rule
+
+If base has:
+
+✔ Default constructor → compiler calls it automatically
+❌ No default constructor → derived must explicitly call parameterized constructor
+
+🧠 Simple Memory Understanding
+
+Derived object contains Base inside it.
+
+So Base must be constructed first.
+
+Always.
+
+//hybrid inheretence
+4. Hierarchical Inheritance
+In hierarchical inheritance, more than one subclass is inherited from a single base class. i.e. more than one derived class is created from a single base class. For example, cars and buses both are vehicle.
+
+hierarchical_inheritance
+Hierarchical Inheritance
+
+
+
+#include <iostream>
+using namespace std;
+​
+class Vehicle
+{
+  public:
+    Vehicle()
+    {
+        cout << "This is a Vehicle" << endl;
+    }
+};
+​
+class Car : public Vehicle
+{
+  public:
+    Car()
+    {
+        cout << "This Vehicle is Car" << endl;
+    }
+};
+​
+class Bus : public Vehicle
+{
+  public:
+    Bus()
+    {
+        cout << "This Vehicle is Bus" << endl;
+    }
+};
+​
+int main()
+{
+    Car obj1;
+    Bus obj2;
+    return 0;
+}
+
+Output
+This is a Vehicle
+This Vehicle is Car
+This is a Vehicle
+This Vehicle is Bus
+
+
+multilevel inheretence 
+
+5. Hybrid Inheritance
+When two or more types of inheritance are combined in one program. For example, a class might use multiple inheritance and also be part of a multilevel inheritance chain.
+
+inheritence_5
+Hybrid Inheritance
+
+
+
+#include <iostream>
+using namespace std;
+​
+class Vehicle
+{
+  public:
+    Vehicle()
+    {
+        cout << "This is a Vehicle" << endl;
+    }
+};
+​
+class Fare
+{
+  public:
+    Fare()
+    {
+        cout << "Fare of Vehicle" << endl;
+    }
+};
+​
+class Car : public Vehicle
+{
+  public:
+    Car()
+    {
+        cout << "This Vehical is a Car" << endl;
+    }
+};
+​
+class Bus : public Vehicle, public Fare
+{
+  public:
+    Bus()
+    {
+        cout << "This Vehicle is a Bus with Fare";
+    }
+};
+​
+int main()
+{
+    Bus obj2;
+    return 0;
+}
+
+Output
+This is a Vehicle
+Fare of Vehicle
+This Vehicle is a Bus with Fare
+Hybrid Inheritance can lead to the diamond problem in C++. This happens when a class inherits from two classes that both share the same base class. As a result the derived class gets multiple copies of the base class members, which creates ambiguity about which one to use.
+
+Note : The solution is to use virtual inheritance, so only a single copy of the base class is shared.
+
+Advantages of Inheritance in C++
+Code Reusability : Derived class can directly reuse data members and methods of its base class, avoiding code duplication.
+Abstraction : Supports abstract classes (classes with pure virtual functions) that define a common interface, enforcing abstraction.
+Class Hierarchy : You can build hierarchies (base → derived → further derived) to model real-world relationships.
+Polymorphism : Fully supports runtime polymorphism through virtual functions, and also compile-time polymorphism via function overloading and templates.
+Disadvantages of Inheritance in C++
+Tight Coupling : The child class becomes dependent on the parent class. Any change in the base class may force changes in derived classes.
+Reduced Flexibility : Sometimes inheritance is misused where composition (has-a relationship) would be better, leading to less flexible code.
+Increased Complexity : Deep inheritance hierarchies (multilevel or hybrid) can make the code hard to understand, maintain, and debug.
+Diamond Problem : With hybrid or multiple inheritance, ambiguity can occur if the same base class is inherited multiple times.
+Overhead of Virtual Functions : If polymorphism (virtual functions) is used, there’s a small runtime overhead due to virtual table lookups.
+
+
+
