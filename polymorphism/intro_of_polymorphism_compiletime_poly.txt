@@ -1,0 +1,196 @@
+.
+
+🔹 What is Polymorphism?
+
+Poly = many
+Morphism = forms
+
+👉 So, Polymorphism means “many forms.”
+
+In C++, it means:
+
+The same name (function or operator) can behave differently in different situations.
+
+🔹 Types of Polymorphism in C++
+
+There are mainly two types:
+
+Compile-Time Polymorphism (Static / Early Binding)
+
+Run-Time Polymorphism (Dynamic / Late Binding)
+
+Your example is about Compile-Time Polymorphism, so let’s focus on that.
+
+✅ 1. Compile-Time Polymorphism
+
+Here, the decision is made at compile time (before program runs).
+
+The compiler decides:
+
+Which function to call
+
+Based on number or type of arguments
+
+It is achieved using:
+
+✔ Function Overloading
+
+✔ Operator Overloading
+
+🔹 A. Function Overloading
+👉 What is Function Overloading?
+
+When:
+
+Two or more functions
+
+Have the same name
+
+But different parameters
+
+That is called Function Overloading.
+
+You can overload by:
+
+Changing number of arguments
+
+Changing type of arguments
+
+🔹 Now Let’s Understand Your Code
+class Geeks {
+public:
+    
+    void add(int a, int b) {
+        cout << "Integer Sum = " << a + b << endl;
+    }
+    
+    void add(double a, double b) {
+        cout << "Float Sum = " << a + b << endl;
+    }
+};
+
+Here:
+
+We have two functions with same name → add()
+
+But difference is:
+
+Function	Parameter Type
+add(int, int)	Integer values
+add(double, double)	Decimal values
+
+So this is Function Overloading.
+
+🔹 What Happens in main()?
+Geeks gfg;
+
+gfg.add(10, 2);
+
+Here:
+
+10 and 2 are integers
+
+So compiler calls:
+
+void add(int a, int b)
+
+Output:
+
+Integer Sum = 12
+
+Next:
+
+gfg.add(5.3, 6.2);
+
+Here:
+
+5.3 and 6.2 are double values
+
+So compiler calls:
+
+void add(double a, double b)
+
+Output:
+
+Float Sum = 11.5
+🔹 Why is this Compile-Time Polymorphism?
+
+Because:
+
+👉 The compiler decides which function to call before execution
+👉 It checks argument types during compilation
+
+No confusion at runtime.
+
+🔹 Simple Real-Life Example
+
+Think of a calculator:
+
+If you enter 2 and 3 → it does integer addition
+
+If you enter 2.5 and 3.7 → it does decimal addition
+
+Same button (+)
+Different behavior depending on input
+
+That is Polymorphism.
+
+🔹 Important Rule
+
+You cannot overload only by changing return type.
+
+❌ Wrong:
+
+int add(int a, int b);
+double add(int a, int b);
+
+Because parameters are same → compiler gets confused.
+
+🔹 Short Summary (Easy Revision)
+
+✔ Polymorphism = One name, many forms
+✔ Compile-time polymorphism = Decided at compile time
+✔ Achieved using:
+
+Function overloading
+
+Operator overloading
+✔ Function overloading = Same function name, different parameters
+
+
+
+function overloading
+#include <bits/stdc++.h>
+using namespace std;
+
+class Geeks {
+public:
+    
+    // Function to add two integers
+    void add(int a, int b) {
+        cout << "Integer Sum = " << a + b
+        << endl;
+    }
+    
+    // Function to add two floating point values
+    void add(double a, double b) {
+        cout << "Float Sum = " << a + b
+        << endl ;
+    }
+};
+
+int main() {
+    Geeks gfg;
+    
+    // add() called with int values
+    gfg.add(10, 2);
+
+    // add() called with double value
+    gfg.add(5.3, 6.2);
+
+    return 0;
+}
+
+
+
+operator overloading 
