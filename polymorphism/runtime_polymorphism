@@ -1,0 +1,382 @@
+Good question 👍 Kireeti.
+This is one of the most important OOP concepts in C++. I will explain it step-by-step in very simple language.
+
+1️⃣ What is Runtime Polymorphism?
+
+We already saw compile-time polymorphism.
+
+Type	Decision Time
+Compile-time	During compilation
+Runtime	During program execution
+
+👉 Runtime polymorphism means the function to execute is decided while the program is running.
+
+It is also called:
+
+Late Binding
+
+Dynamic Polymorphism
+
+2️⃣ How Runtime Polymorphism is Achieved
+
+It is implemented using:
+
+Function Overriding
+
+Virtual Functions
+
+Base class pointer + Derived class object
+
+All three together create runtime polymorphism.
+
+3️⃣ Function Overriding
+Definition
+
+Function overriding happens when:
+
+A derived class defines a function
+
+That already exists in the base class
+
+With the same name and parameters
+
+Then the base class function is overridden.
+
+Example Concept
+
+Base class:
+
+display()
+
+Derived class:
+
+display()
+
+Same function name → Derived class replaces base class behavior.
+
+4️⃣ Virtual Function
+
+A virtual function tells the compiler:
+
+"Do not decide which function to call now. Decide it at runtime."
+
+It is declared using the keyword:
+
+virtual
+
+Example:
+
+virtual void display();
+
+Without virtual, runtime polymorphism will not work.
+
+5️⃣ Now Let's Understand Your Code
+Base Class
+class Base {
+public:
+
+    virtual void display() {
+        cout << "Base class function";
+    }
+};
+
+Here:
+
+display()
+
+is declared virtual.
+
+This means:
+
+The function can be overridden in derived classes.
+
+Derived Class
+class Derived : public Base {
+public:
+
+    void display() override {
+        cout << "Derived class function";
+    }
+};
+
+Here the derived class overrides the base class function.
+
+So now:
+
+Class	display()
+Base	Base class function
+Derived	Derived class function
+6️⃣ Important Line in Main Function
+Base* basePtr;
+
+This means:
+
+basePtr is a pointer of Base class
+Creating Derived Object
+Derived derivedObj;
+
+Now we have an object of derived class.
+
+Base Pointer Pointing to Derived Object
+basePtr = &derivedObj;
+
+This means:
+
+Base pointer → Derived object
+
+This is called:
+
+Upcasting
+Base* → Derived object
+7️⃣ Calling the Function
+basePtr->display();
+
+Now the big question:
+
+Which function will run?
+
+Base display()
+OR
+Derived display()
+
+Because pointer type is Base.
+
+8️⃣ What Happens Without Virtual
+
+If virtual was not used:
+
+Base class function
+
+would run.
+
+Because compiler checks pointer type.
+
+9️⃣ What Happens With Virtual
+
+Because we used:
+
+virtual
+
+C++ checks actual object type at runtime.
+
+Object type:
+
+Derived
+
+So it runs:
+
+Derived class function
+
+Output:
+
+Derived class function
+🔟 Why This Happens
+
+Because C++ uses something called:
+
+Dynamic Binding
+
+The function call is resolved during runtime, not compilation.
+
+1️⃣1️⃣ Important Concept: vtable (Interview Topic)
+
+When we declare a virtual function, C++ creates:
+
+Virtual Table (vtable)
+
+Each class has a table storing addresses of virtual functions.
+
+Example concept:
+
+Base vtable → display()
+Derived vtable → display()
+
+When program runs:
+
+basePtr → derivedObj
+
+C++ checks the derived vtable and calls:
+
+Derived display()
+1️⃣2️⃣ Why Use Runtime Polymorphism?
+
+It is useful when:
+
+We don't know which object type will be used.
+
+Example:
+
+Shape
+   |
+   |---- Circle
+   |---- Rectangle
+   |---- Triangle
+
+All shapes have:
+
+draw()
+
+But each shape draws differently.
+
+Using runtime polymorphism:
+
+Shape* s;
+s->draw();
+
+Correct function will run automatically.
+
+1️⃣3️⃣ Important Rules of Function Overriding
+
+1️⃣ Function name must be same
+
+2️⃣ Parameters must be same
+
+3️⃣ Must use inheritance
+
+4️⃣ Base function should be virtual
+
+1️⃣4️⃣ override Keyword
+
+You saw this:
+
+void display() override
+
+This keyword:
+
+✔ Confirms the function is overriding
+✔ Prevents mistakes
+
+Example error:
+
+display(int)
+
+Then compiler will detect mismatch.
+
+1️⃣5️⃣ Base Pointer to Derived Object (Important)
+
+This is the core rule of runtime polymorphism.
+
+Base* ptr;
+Derived obj;
+
+ptr = &obj;
+
+Then calling virtual function:
+
+ptr->function();
+
+will call derived version.
+
+1️⃣6️⃣ Difference: Overloading vs Overriding
+Feature	Overloading	Overriding
+Class	Same class	Base + Derived
+Parameters	Different	Same
+Polymorphism	Compile time	Runtime
+Keyword	No virtual needed	virtual required
+1️⃣7️⃣ Pure Virtual Function (Very Important Topic)
+
+Sometimes base class only declares function.
+
+Example:
+
+virtual void display() = 0;
+
+This is called:
+
+Pure Virtual Function
+
+Class becomes:
+
+Abstract Class
+
+Meaning:
+
+You cannot create object of this class.
+
+Example:
+
+Shape
+
+You cannot create a general shape.
+
+But you can create:
+
+Circle
+Rectangle
+Triangle
+1️⃣8️⃣ Virtual Destructor (Advanced but Important)
+
+If base class has virtual functions, destructor should also be virtual.
+
+Example:
+
+virtual ~Base() {}
+
+This ensures proper cleanup.
+
+1️⃣9️⃣ Short Summary
+Compile-Time Polymorphism
+
+Function overloading
+
+Operator overloading
+
+Decided at compile time
+
+Runtime Polymorphism
+
+Function overriding
+
+Uses virtual functions
+
+Base pointer → derived object
+
+Function decided at runtime
+
+⭐ One Line Memory Trick
+Overloading → Compile Time
+Overriding → Runtime
+
+
+example program
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Base {
+public:
+
+    // Virtual function
+    virtual void display() {
+        cout << "Base class function";
+    }
+};
+
+class Derived : public Base {
+public:
+
+    // Overriding the base class function
+    void display() override {
+        cout << "Derived class function";
+    }
+};
+
+int main() {
+    
+    // Creating a pointer of type Base
+    Base* basePtr;
+    
+    // Creating an object of Derived class
+    Derived derivedObj;
+
+    // Pointing base class pointer to 
+    // derived class object
+    basePtr = &derivedObj;
+    
+    // Calling the display function 
+    // using base class pointer
+    basePtr->display();
+    return 0;
+}
+
+
