@@ -12,7 +12,7 @@ int main()
     
     for(int i=0;i<len;i++)
     {
-        if(str[i]>=65 && str[i]<=97)
+        if(str[i]>=65 && str[i]<97)
             str[i]=str[i]+32;
     }
     
