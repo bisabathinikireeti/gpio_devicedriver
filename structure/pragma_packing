@@ -1,0 +1,143 @@
+PART 1 — What #pragma pack Does
+It changes struct member alignment rules and can reduce padding.
+Normal alignment (common):
+char   = 1short  = 2int    = 4double = 8pointer(64-bit) = 8
+
+PART 2 — Basic #pragma pack(1)
+Code
+#include <stdio.h>#pragma pack(1)struct A {    char a;    int b;};int main() {    printf("%zu\n", sizeof(struct A));}
+Output
+5
+Memory Diagram
+Offset: 0 1 2 3 4        a b b b b
+No padding.
+
+PART 3 — Normal Version (No pack)
+Code
+struct A {    char a;    int b;};
+Output
+8
+Layout
+0 a1-3 pad4-7 b
+
+PART 4 — #pragma pack()
+Restore default alignment.
+Code
+#pragma pack(1)struct A {    char a;    int b;};#pragma pack()struct B {    char a;    int b;};
+Output
+sizeof(A)=5sizeof(B)=8
+
+PART 5 — #pragma pack(push,1) and pop
+Best practice.
+Code
+#include <stdio.h>struct Normal1 {    char a;    int b;};#pragma pack(push,1)struct Packed {    char a;    int b;};#pragma pack(pop)struct Normal2 {    char a;    int b;};int main() {    printf("%zu\n", sizeof(struct Normal1));    printf("%zu\n", sizeof(struct Packed));    printf("%zu\n", sizeof(struct Normal2));}
+Output
+858
+
+Meaning
+push = save current packing state1    = set pack(1)pop  = restore previous state
+
+PART 6 — Dangerous Global pack
+Code
+#pragma pack(1)struct Packet {    char a;    int b;};struct Unexpected {    char x;    int y;};
+Output
+sizeof(Packet)=5sizeof(Unexpected)=5
+Problem: second struct also packed unintentionally.
+
+PART 7 — #pragma pack(2)
+Code
+#include <stdio.h>#pragma pack(2)struct X {    char a;    int b;};int main() {    printf("%zu\n", sizeof(struct X));}
+Output
+6
+Layout
+0 a1 pad2-5 b
+
+PART 8 — Your Exact Mixed Example
+Code
+#include <stdio.h>#pragma pack(2)struct Normal1 {    char a;    int b;} __attribute__((packed));struct Normal2 {    char a;    int b;};int main() {    printf("Normal1 = %zu\n", sizeof(struct Normal1));    printf("Normal2 = %zu\n", sizeof(struct Normal2));}
+Output
+Normal1 = 5Normal2 = 6
+
+Why?
+Normal1
+packed removes padding.
+0 a1-4 bsize=5
+Normal2
+Still under pack(2).
+0 a1 pad2-5 bsize=6
+
+PART 9 — GCC / Clang __attribute__((packed))
+Code
+#include <stdio.h>struct Foo {    int x;    char y;} __attribute__((packed));int main() {    printf("%zu\n", sizeof(struct Foo));}
+Output
+5
+
+Layout
+0-3 x4   y
+
+PART 10 — Normal Version of Above
+Code
+struct Foo {    int x;    char y;};
+Output
+8
+Layout
+0-3 x4   y5-7 pad
+
+PART 11 — Packed Struct with Misaligned Int
+Code
+struct P {    char a;    int b;} __attribute__((packed));
+Layout
+0 a1-4 b
+Risk
+x86 -> works, maybe slowerARM strict -> may fault
+
+Safe Access
+Code
+int temp;memcpy(&temp, &obj.b, sizeof(temp));
+
+PART 12 — aligned(n) Attribute
+Code
+struct B {    char a;    int b;} __attribute__((aligned(16)));
+Meaning
+Struct starts on 16-byte boundary.Size may round to multiple of 16.
+
+PART 13 — Packed + Aligned Together
+Code
+struct C {    char a;    int b;} __attribute__((packed, aligned(4)));
+Meaning
+Internal packing tightType alignment at least 4
+
+PART 14 — When to Use Packing
+Use Cases
+network packetsBMP/WAV headersUSB descriptorsEEPROM datahardware MMIO mapsbinary file formats
+
+PART 15 — When NOT to Use
+normal application structsperformance-critical arraysfrequently accessed numeric members
+
+PART 16 — Golden Rules
+Rule 1
+Use natural alignment by default.
+Rule 2
+Use packed only when exact byte layout required.
+Rule 3
+Prefer push/pop around pragma pack.
+Rule 4
+packed affects one type, pragma may affect many later types.
+
+PART 17 — Quick Comparison Table
+FeatureEffect#pragma pack(1)max alignment 1#pragma pack(2)max alignment 2#pragma pack(push,1)save old + set 1#pragma pack(pop)restore old__attribute__((packed))tightly pack one struct__attribute__((aligned(16)))force 16-byte alignment
+
+PART 18 — One-Line Memory Aid
+packed shrinkspack(n) caps alignmentaligned(n) enlarges alignmentpush/pop scopes changes safely
+
+PART 19 — Most Important Output List
+char + int normal          = 8char + int pack(1)        = 5char + int pack(2)        = 6char + int packed attr    = 5packed + pragma(2) case   = 5 / 6
+
+PART 20 — Interview Question
+Why use push/pop?
+To avoid accidentally changing packing of later structs or included headers.
+
+If you want next, I can convert this into:
+📄 PDF Notes
+📘 Part 3: alignas / offsetof / static_assert full notes
+💯 50 tricky pragma pack interview questions
